@@ -18,6 +18,14 @@ public class RankPlugin extends JavaPlugin {
         getCommand("rank").setExecutor(command);
         getCommand("rank").setTabCompleter(command);
 
+        if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new RankExpansion(this, manager).register();
+            getLogger().info("PlaceholderAPI terdeteksi, placeholder %ranksystem_*% aktif.");
+        }
+        if (getServer().getPluginManager().isPluginEnabled("Vault")) {
+            VaultHook.register(this, manager);
+            getLogger().info("Vault terdeteksi, provider Chat/Permission terdaftar.");
+        }
         manager.applyAll(); // untuk kasus /reload
     }
 

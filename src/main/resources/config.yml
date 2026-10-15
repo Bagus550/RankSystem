@@ -29,7 +29,7 @@ default-rank: member
 chat:
   # true  = plugin mengatur tampilan chat (prefix rank muncul di chat)
   # false = chat dibiarkan memakai format bawaan server / plugin lain
-  enabled: true
+  enabled: false
 
   # Placeholder yang tersedia:
   #   <prefix>  = prefix rank pemain (diambil dari "ranks.<id>.prefix")

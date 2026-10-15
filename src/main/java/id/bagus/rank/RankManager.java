@@ -2,10 +2,13 @@ package id.bagus.rank;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.OfflinePlayer;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,10 +23,25 @@ public class RankManager {
     private final Map<UUID, PermissionAttachment> attachments = new HashMap<>();
     private final File dataFile;
     private String defaultRank;
+    private static final LegacyComponentSerializer LEGACY =
+            LegacyComponentSerializer.builder().character('&').hexColors().build();
 
     public RankManager(RankPlugin plugin) {
         this.plugin = plugin;
         this.dataFile = new File(plugin.getDataFolder(), "data.yml");
+    }
+
+    /** Prefix dalam format legacy (&a, &#rrggbb) untuk plugin yang tidak mengenal MiniMessage. */
+    public String legacyPrefix(Rank rank) {
+        return LEGACY.serialize(mm.deserialize(rank.prefix()));
+    }
+
+    /** Cari rank berdasarkan nama pemain (online maupun yang ter-cache). */
+    public Rank getRankByName(String playerName) {
+        Player online = Bukkit.getPlayerExact(playerName);
+        if (online != null) return getRank(online.getUniqueId());
+        OfflinePlayer off = Bukkit.getOfflinePlayerIfCached(playerName);
+        return off == null ? null : getRank(off.getUniqueId());
     }
 
     public void load() {
