@@ -33,7 +33,17 @@ public class RankManager {
 
     /** Prefix dalam format legacy (&a, &#rrggbb) untuk plugin yang tidak mengenal MiniMessage. */
     public String legacyPrefix(Rank rank) {
-        return LEGACY.serialize(mm.deserialize(rank.prefix()));
+        return LEGACY.serialize(mm.deserialize(prefixNow(rank)));
+    }
+
+    /** Prefix dengan {phase} sudah diganti sesuai waktu saat ini. */
+    public String prefixNow(Rank rank) {
+        String prefix = rank.prefix();
+        if (!prefix.contains("{phase}")) return prefix;
+
+        double period = Math.max(500, plugin.getConfig().getDouble("animation.period-ms", 4000));
+        double phase = ((System.currentTimeMillis() % (long) period) / period) * 2.0 - 1.0;
+        return prefix.replace("{phase}", String.format(java.util.Locale.ROOT, "%.2f", phase));
     }
 
     /** Cari rank berdasarkan nama pemain (online maupun yang ter-cache). */

@@ -39,7 +39,7 @@ public class RankListener implements Listener {
                 "<prefix> <player>: <message>");
 
         e.renderer((source, displayName, message, viewer) -> mm.deserialize(format,
-                Placeholder.parsed("prefix", rank.prefix()),
+                Placeholder.parsed("prefix", manager.prefixNow(rank)),
                 Placeholder.component("player", displayName),
                 Placeholder.component("message", message)));
     }

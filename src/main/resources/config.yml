@@ -91,12 +91,15 @@ messages:
 #   - Menghapus rank dari config membuat pemain yang memakainya jatuh
 #     ke rank default.
 #   - Permission "ranks.admin" dibutuhkan untuk memakai command /rank.
+animation:
+  # Lama satu putaran animasi (milidetik). Makin kecil makin cepat.
+  period-ms: 4000
 ranks:
 
   # --- Rank paling dasar -------------------------------------------------------
   member:
     display-name: "Member"
-    prefix: "<gray>[Member]</gray>"
+    prefix: "<gray>[Member]</gray>" # polos, rank paling dasar
     weight: 1
     inherits: []
     permissions:
@@ -106,7 +109,7 @@ ranks:
   # --- Rank donatur ------------------------------------------------------------
   vip:
     display-name: "VIP"
-    prefix: "<green>[VIP]</green>"
+    prefix: "<green><bold>[VIP]</bold></green>"  # warna tunggal + bold
     weight: 10
     inherits: [member]          # otomatis dapat semua permission member
     permissions:
@@ -116,7 +119,7 @@ ranks:
   # --- Moderator ---------------------------------------------------------------
   moderator:
     display-name: "Moderator"
-    prefix: "<blue>[Mod]</blue>"
+    prefix: "<gradient:#4facfe:#00f2fe><bold>[MOD]</bold></gradient>" # gradient statis
     weight: 50
     inherits: [vip]
     permissions:
@@ -127,7 +130,7 @@ ranks:
   # --- Administrator -----------------------------------------------------------
   admin:
     display-name: "Admin"
-    prefix: "<red><bold>[Admin]</bold></red>"
+    prefix: "<gradient:#ff512f:#f09819:{phase}><bold>[ADMIN]</bold></gradient>" # gradient warna animasi
     weight: 100
     inherits: [moderator]
     permissions:
