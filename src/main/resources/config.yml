@@ -1,0 +1,136 @@
+# ==============================================================================
+#  RankSystem - config.yml
+# ==============================================================================
+#  Setelah mengubah file ini, jalankan:  /rank reload
+#
+#  Semua teks (prefix, format chat, pesan) memakai format MiniMessage:
+#    Warna       : <red>teks</red>, <#ff8800>teks</#ff8800>
+#    Gaya        : <bold>, <italic>, <underlined>, <strikethrough>
+#    Gradient    : <gradient:red:blue>teks</gradient>
+#    Reset       : <reset>
+#  Dokumentasi lengkap: https://docs.advntr.dev/minimessage/format.html
+#
+#  PENTING: tutup tag yang kamu buka, dan jangan memakai kode warna lama (&a, §a).
+# ==============================================================================
+
+
+# ------------------------------------------------------------------------------
+#  RANK DEFAULT
+# ------------------------------------------------------------------------------
+#  Rank yang dipakai pemain yang belum pernah diberi rank lewat /rank set.
+#  Nilainya harus sama dengan salah satu ID rank di bagian "ranks" di bawah.
+#  Kalau ID-nya tidak ditemukan, plugin memakai rank pertama yang tertulis.
+default-rank: member
+
+
+# ------------------------------------------------------------------------------
+#  FORMAT CHAT
+# ------------------------------------------------------------------------------
+chat:
+  # true  = plugin mengatur tampilan chat (prefix rank muncul di chat)
+  # false = chat dibiarkan memakai format bawaan server / plugin lain
+  enabled: true
+
+  # Placeholder yang tersedia:
+  #   <prefix>  = prefix rank pemain (diambil dari "ranks.<id>.prefix")
+  #   <player>  = nama pemain
+  #   <message> = isi pesan yang diketik pemain
+  #
+  # Contoh hasil: [VIP] Bagus » halo semua
+  format: "<prefix> <gray><player></gray><dark_gray> » </dark_gray><white><message></white>"
+
+
+# ------------------------------------------------------------------------------
+#  TAB LIST (daftar pemain yang muncul saat menekan TAB)
+# ------------------------------------------------------------------------------
+tablist:
+  # true  = nama di tab list menjadi "<prefix> <nama>"
+  # false = nama di tab list tidak diubah
+  enabled: true
+
+
+# ------------------------------------------------------------------------------
+#  PESAN PLUGIN
+# ------------------------------------------------------------------------------
+#  Pesan yang dikirim ke pengirim command. Placeholder yang tersedia:
+#    <player> = nama pemain yang dituju command
+#    <rank>   = nama tampilan (display-name) rank
+#  Placeholder yang tidak relevan untuk suatu pesan akan kosong.
+messages:
+  no-permission: "<red>Kamu tidak punya izin untuk memakai command ini."
+  rank-set: "<green>Rank <yellow><player></yellow> diubah menjadi <yellow><rank></yellow>."
+  rank-removed: "<green>Rank <yellow><player></yellow> direset ke rank default."
+  unknown-rank: "<red>Rank tidak ditemukan. Cek daftar rank dengan /rank list."
+  unknown-player: "<red>Pemain tidak ditemukan. Pastikan namanya benar dan dia pernah join."
+  reloaded: "<green>Config berhasil di-reload."
+
+
+# ------------------------------------------------------------------------------
+#  DAFTAR RANK
+# ------------------------------------------------------------------------------
+#  Setiap rank ditulis dengan format:
+#
+#    <id>:                      # ID rank. Dipakai di command dan di "inherits".
+#                               # Huruf kecil, tanpa spasi (contoh: vip, mod-senior)
+#      display-name: "Nama"     # Nama yang tampil di pesan plugin.
+#      prefix: "<green>[VIP]"   # Teks di depan nama (chat & tab list), format MiniMessage.
+#      weight: 10               # Tingkat rank. Angka lebih besar = rank lebih tinggi.
+#                               # Saat ini dipakai untuk mengurutkan /rank list.
+#      inherits: [member]       # Rank yang permission-nya diwarisi (boleh kosong: []).
+#                               # Pewarisan bisa berantai (admin -> vip -> member).
+#      permissions:             # Daftar permission yang diberikan rank ini.
+#        - nama.permission      # Beri permission.
+#        - "-nama.permission"   # Awali dengan "-" untuk MENCABUT permission
+#                               # (termasuk yang diwarisi dari rank lain).
+#                               # Tanda kutip wajib untuk entri yang diawali "-".
+#
+#  Aturan penting:
+#   - Jangan membuat rank yang saling mewarisi (A inherits B, B inherits A).
+#     Plugin tidak akan error, tapi pewarisan yang melingkar diabaikan.
+#   - Permission milik rank sendiri selalu menimpa permission yang diwarisi.
+#   - Menghapus rank dari config membuat pemain yang memakainya jatuh
+#     ke rank default.
+#   - Permission "ranks.admin" dibutuhkan untuk memakai command /rank.
+ranks:
+
+  # --- Rank paling dasar -------------------------------------------------------
+  member:
+    display-name: "Member"
+    prefix: "<gray>[Member]</gray>"
+    weight: 1
+    inherits: []
+    permissions:
+      - essentials.home
+      - essentials.sethome
+
+  # --- Rank donatur ------------------------------------------------------------
+  vip:
+    display-name: "VIP"
+    prefix: "<green>[VIP]</green>"
+    weight: 10
+    inherits: [member]          # otomatis dapat semua permission member
+    permissions:
+      - essentials.fly
+      - essentials.nick
+
+  # --- Moderator ---------------------------------------------------------------
+  moderator:
+    display-name: "Moderator"
+    prefix: "<blue>[Mod]</blue>"
+    weight: 50
+    inherits: [vip]
+    permissions:
+      - essentials.kick
+      - essentials.mute
+      - "-essentials.fly"       # contoh: moderator TIDAK boleh fly walau vip boleh
+
+  # --- Administrator -----------------------------------------------------------
+  admin:
+    display-name: "Admin"
+    prefix: "<red><bold>[Admin]</bold></red>"
+    weight: 100
+    inherits: [moderator]
+    permissions:
+      - ranks.admin             # wajib agar bisa memakai /rank
+      - minecraft.command.gamemode
+      - minecraft.command.give
