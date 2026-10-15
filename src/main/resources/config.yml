@@ -45,13 +45,39 @@ chat:
 #  Syarat ditulis di tiap rank pada bagian "requirements" (lihat bagian ranks).
 auto-rankup:
   enabled: true
-  # Seberapa sering plugin mengecek pemain online (detik, minimal 10)
   check-interval-seconds: 60
-  # Pesan ke pemain yang naik rank. Placeholder: <player> <rank>
-  message: "<green>Selamat! Rank kamu naik menjadi <yellow><rank></yellow>."
-  # Umumkan ke seluruh server?
+
+  # Placeholder untuk semua teks di bawah:
+  #   <player>  nama pemain
+  #   <rank>    nama rank (tanpa warna)
+  #   <prefix>  prefix rank lengkap dengan warna/gradient
+  message: "<green>Selamat! Rank kamu naik menjadi <prefix>"
+
+  # Pengumuman ke seluruh server. Agar chat tidak penuh, hanya rank dengan
+  # weight sama atau lebih dari angka ini yang diumumkan.
   broadcast-enabled: true
-  broadcast: "<gold><player></gold> <gray>naik rank menjadi</gray> <yellow><rank></yellow><gray>!</gray>"
+  broadcast-min-weight: 15
+  broadcast: "<gold><player></gold> <gray>naik rank menjadi</gray> <prefix>"
+
+  # Tulisan besar di tengah layar pemain yang naik rank
+  title:
+    enabled: true
+    title: "<gradient:#f7971e:#ffd200><bold>RANK UP!</bold></gradient>"
+    subtitle: "<gray>Kamu sekarang <prefix>"
+    fade-in-ms: 500
+    stay-ms: 3500
+    fade-out-ms: 1000
+
+  # Suara untuk pemain yang naik rank. Daftar ID suara: minecraft.wiki (cari "Sounds.json")
+  sound:
+    enabled: true
+    key: "minecraft:ui.toast.challenge_complete"
+    volume: 1.0
+    pitch: 1.0
+
+  # Efek partikel di sekitar pemain (terlihat juga oleh pemain lain di dekatnya)
+  particles:
+    enabled: true
 
 # ------------------------------------------------------------------------------
 #  TAB LIST (daftar pemain yang muncul saat menekan TAB)
@@ -139,8 +165,8 @@ ranks:
     weight: 5
     inherits: [citizen]          # otomatis dapat semua permission member
     requirements:
-      playtime-hours: 2
-      exp: 300
+      playtime-hours: 0.01
+      exp: 10
     permissions:
       - essentials.sethome.multiple.wanderer
 
@@ -165,7 +191,8 @@ ranks:
     prefix: "<gold><bold>[Veteran]</bold></gold>"
     weight: 15
     inherits: [explorer]          # otomatis dapat semua permission member
-    playtime-hours: 30
+    requirements:
+      playtime-hours: 30
       exp: 8000
     permissions:
       - essentials.sethome.multiple.veteran
@@ -176,7 +203,8 @@ ranks:
     prefix: "<gradient:#8e2de2:#ff6ec7><bold>[Elite]</bold></gradient>"
     weight: 20
     inherits: [veteran]          # otomatis dapat semua permission member
-    playtime-hours: 80
+    requirements:
+      playtime-hours: 80
       exp: 25000
     permissions:
       - essentials.sethome.multiple.elite

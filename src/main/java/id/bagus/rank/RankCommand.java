@@ -82,6 +82,15 @@ public class RankCommand implements CommandExecutor, TabCompleter {
                 Rank rank = manager.getRank(target.getUniqueId());
                 sender.sendMessage(mm.deserialize("<gray>" + args[1] + ": </gray>" + rank.prefix()));
             }
+            case "preview" -> {
+                if (!(sender instanceof Player player) || args.length < 2) {
+                    sender.sendMessage("/rank preview <rank>  (hanya untuk pemain)");
+                    return true;
+                }
+                Rank rank = manager.getRank(args[1]);
+                if (rank == null) { msg(sender, "unknown-rank", null, args[1]); return true; }
+                plugin.getAutoRank().celebrate(player, rank);
+            }
             default -> sender.sendMessage("/rank <set|remove|info|list|reload>");
         }
         return true;
