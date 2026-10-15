@@ -95,45 +95,95 @@ animation:
   # Lama satu putaran animasi (milidetik). Makin kecil makin cepat.
   period-ms: 4000
 ranks:
-
-  # --- Rank paling dasar -------------------------------------------------------
-  member:
-    display-name: "Member"
-    prefix: "<gray>[Member]</gray>" # polos, rank paling dasar
+  citizen:
+    display-name: "Citizen"
+    prefix: "<gray>[Citizen]</gray>" # polos, rank paling dasar
     weight: 1
     inherits: []
     permissions:
-      - essentials.home
+      # Home & teleport dasar
       - essentials.sethome
+      - essentials.home
+      - essentials.delhome
+      - essentials.back
+      - essentials.spawn
+      # Komunikasi & info
+      - essentials.msg
+      - essentials.ignore
+      - essentials.help
+      - essentials.list
+      - essentials.rules
+      - essentials.motd
+      # Ekonomi
+      - essentials.balance
+      - essentials.pay
+      - essentials.balancetop
+      - essentials.afk
 
-  # --- Rank donatur ------------------------------------------------------------
-  vip:
-    display-name: "VIP"
-    prefix: "<green><bold>[VIP]</bold></green>"  # warna tunggal + bold
-    weight: 10
-    inherits: [member]          # otomatis dapat semua permission member
+  wanderer:
+    display-name: "Wanderer"
+    prefix: "<green>[Wanderer]</green>"
+    weight: 5
+    inherits: [citizen]          # otomatis dapat semua permission member
     permissions:
-      - essentials.fly
-      - essentials.nick
+      - essentials.sethome.multiple.wanderer
 
-  # --- Moderator ---------------------------------------------------------------
+  explorer:
+    display-name: "Explorer"
+    prefix: "<aqua><bold>[Explorer]</bold></aqua>"
+    weight: 10
+    inherits: [wanderer]          # otomatis dapat semua permission member
+    permissions:
+      - essentials.sethome.multiple.explorer
+      - essentials.tpa               # teleport ke teman baru dibuka di sini
+      - essentials.tpahere
+      - essentials.tpaccept
+      - essentials.tpdeny
+      - essentials.tpacancel
+
+  veteran:
+    display-name: "Veteran"
+    prefix: "<gold><bold>[Veteran]</bold></gold>"
+    weight: 15
+    inherits: [explorer]          # otomatis dapat semua permission member
+    permissions:
+      - essentials.sethome.multiple.veteran
+      - essentials.back.ondeath
+
+  elite:
+    display-name: "Elite"
+    prefix: "<gradient:#8e2de2:#ff6ec7><bold>[Elite]</bold></gradient>"
+    weight: 20
+    inherits: [veteran]          # otomatis dapat semua permission member
+    permissions:
+      - essentials.sethome.multiple.elite
+      - essentials.nick              # ganti nickname
+      - essentials.chat.color        # boleh pakai warna di chat
+
   moderator:
     display-name: "Moderator"
-    prefix: "<gradient:#4facfe:#00f2fe><bold>[MOD]</bold></gradient>" # gradient statis
+    prefix: "<gradient:#ff512f:#dd2476><bold>[MOD]</bold></gradient>"
     weight: 50
-    inherits: [vip]
+    inherits: [elite]
     permissions:
+      - essentials.fly
+      - essentials.sethome.multiple.staff
       - essentials.kick
       - essentials.mute
-      - "-essentials.fly"       # contoh: moderator TIDAK boleh fly walau vip boleh
+      - essentials.tempban
+      - essentials.tp
+      - essentials.tphere
+      - essentials.invsee
+      - essentials.vanish
+      - essentials.socialspy
+      - essentials.seen
+      - essentials.whois
 
-  # --- Administrator -----------------------------------------------------------
-  admin:
-    display-name: "Admin"
-    prefix: "<gradient:#ff512f:#f09819:{phase}><bold>[ADMIN]</bold></gradient>" # gradient warna animasi
+  owner:
+    display-name: "Owner"
+    prefix: "<gradient:#f7971e:#ffd200:{phase}><bold>[Owner]</bold></gradient>" # gradient warna animasi
     weight: 100
     inherits: [moderator]
     permissions:
-      - ranks.admin             # wajib agar bisa memakai /rank
-      - minecraft.command.gamemode
-      - minecraft.command.give
+      - ranks.admin
+      - essentials.*
