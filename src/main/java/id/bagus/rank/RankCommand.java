@@ -47,6 +47,7 @@ public class RankCommand implements CommandExecutor, TabCompleter {
             case "reload" -> {
                 manager.load();
                 manager.applyAll();
+                plugin.getAutoRank().start();
                 msg(sender, "reloaded", null, null);
             }
             case "list" -> {

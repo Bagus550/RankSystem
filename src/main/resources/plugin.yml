@@ -11,3 +11,7 @@ commands:
     description: Kelola rank pemain
     usage: /rank <set|remove|info|list|reload>
     permission: ranks.admin
+  progress:
+    description: Lihat progres menuju rank berikutnya
+    usage: /progress
+    aliases: [ rankprogress ]

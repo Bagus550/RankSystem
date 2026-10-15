@@ -39,6 +39,19 @@ chat:
   # Contoh hasil: [VIP] Bagus » halo semua
   format: "<prefix> <gray><player></gray><dark_gray> » </dark_gray><white><message></white>"
 
+# ------------------------------------------------------------------------------
+#  NAIK RANK OTOMATIS
+# ------------------------------------------------------------------------------
+#  Syarat ditulis di tiap rank pada bagian "requirements" (lihat bagian ranks).
+auto-rankup:
+  enabled: true
+  # Seberapa sering plugin mengecek pemain online (detik, minimal 10)
+  check-interval-seconds: 60
+  # Pesan ke pemain yang naik rank. Placeholder: <player> <rank>
+  message: "<green>Selamat! Rank kamu naik menjadi <yellow><rank></yellow>."
+  # Umumkan ke seluruh server?
+  broadcast-enabled: true
+  broadcast: "<gold><player></gold> <gray>naik rank menjadi</gray> <yellow><rank></yellow><gray>!</gray>"
 
 # ------------------------------------------------------------------------------
 #  TAB LIST (daftar pemain yang muncul saat menekan TAB)
@@ -125,6 +138,9 @@ ranks:
     prefix: "<green>[Wanderer]</green>"
     weight: 5
     inherits: [citizen]          # otomatis dapat semua permission member
+    requirements:
+      playtime-hours: 2
+      exp: 300
     permissions:
       - essentials.sethome.multiple.wanderer
 
@@ -133,6 +149,9 @@ ranks:
     prefix: "<aqua><bold>[Explorer]</bold></aqua>"
     weight: 10
     inherits: [wanderer]          # otomatis dapat semua permission member
+    requirements:
+      playtime-hours: 10
+      exp: 2000
     permissions:
       - essentials.sethome.multiple.explorer
       - essentials.tpa               # teleport ke teman baru dibuka di sini
@@ -146,6 +165,8 @@ ranks:
     prefix: "<gold><bold>[Veteran]</bold></gold>"
     weight: 15
     inherits: [explorer]          # otomatis dapat semua permission member
+    playtime-hours: 30
+      exp: 8000
     permissions:
       - essentials.sethome.multiple.veteran
       - essentials.back.ondeath
@@ -155,6 +176,8 @@ ranks:
     prefix: "<gradient:#8e2de2:#ff6ec7><bold>[Elite]</bold></gradient>"
     weight: 20
     inherits: [veteran]          # otomatis dapat semua permission member
+    playtime-hours: 80
+      exp: 25000
     permissions:
       - essentials.sethome.multiple.elite
       - essentials.nick              # ganti nickname

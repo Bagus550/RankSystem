@@ -68,7 +68,9 @@ public class RankManager {
                         s.getString("prefix", ""),
                         s.getInt("weight", 0),
                         s.getStringList("permissions"),
-                        s.getStringList("inherits")));
+                        s.getStringList("inherits"),
+                        s.getDouble("requirements.playtime-hours", 0),
+                        s.getLong("requirements.exp", 0)));
             }
         }
         defaultRank = plugin.getConfig().getString("default-rank", "member").toLowerCase();
