@@ -15,8 +15,9 @@ public class RankPlugin extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         manager = new RankManager(this);
-        messages = new Messages(this);
         manager.load();
+        messages = new Messages(this);
+        messages.load();
 
         getServer().getPluginManager().registerEvents(new RankListener(this, manager), this);
 

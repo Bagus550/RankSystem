@@ -58,6 +58,7 @@ public class Messages {
 
     /** Teks mentah. Kalau kunci tidak ada di bahasa aktif, pakai bahasa Inggris. */
     public String raw(String key) {
+        if (active == null) load();
         String value = active.getString(key);
         if (value == null) value = fallback.getString(key);
         return value != null ? value : "<red>[missing message: " + key + "]";

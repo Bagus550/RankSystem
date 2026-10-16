@@ -5,6 +5,8 @@ api-version: '26.2'
 softdepend: [Vault, PlaceholderAPI]
 
 description: Sistem rank dengan prefix gradient dan animasi, permission per rank, serta integrasi TAB dan EssentialsX Chat.
+authors:
+  - BagusDev
 
 commands:
   rank:
