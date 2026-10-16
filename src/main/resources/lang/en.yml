@@ -1,0 +1,46 @@
+# ==============================================================================
+#  RankSystem - language file (en)
+# ==============================================================================
+#  Reload with /rank reload. Choose the language with "language:" in config.yml.
+#  Texts use MiniMessage. Placeholders look like <player>, <rank>, <prefix>.
+#  Missing keys fall back to the built-in English text.
+#
+#  To print a literal "<" (for example in usage lines), write \< and wrap the
+#  whole value in single quotes, like the "usage" entries below.
+# ==============================================================================
+
+command:
+  no-permission: "<red>You don't have permission to do that."
+  player-only: "<red>This command can only be used by players."
+  reloaded: "<green>Config and language reloaded."
+  unknown-player: "<red>Player not found. Check the name and make sure they have joined before."
+  unknown-rank: "<red>Rank not found. See the list with /rank list."
+  rank-set: "<green>Rank of <yellow><player></yellow> set to <yellow><rank></yellow>."
+  rank-removed: "<green>Rank of <yellow><player></yellow> reset to the default rank."
+  usage:
+    main: '<gray>Usage: <white>/rank set|remove|info|list|reload|preview'
+    set: '<gray>Usage: <white>/rank set \<player> \<rank>'
+    remove: '<gray>Usage: <white>/rank remove \<player>'
+    info: '<gray>Usage: <white>/rank info \<player>'
+    preview: '<gray>Usage: <white>/rank preview \<rank>'
+  list:
+    header: "<gray>Available ranks:"
+    # Placeholders: <prefix> <id> <weight>
+    entry: "<prefix> <gray>(<id>, weight <weight>)"
+  info:
+    # Placeholders: <player> <prefix>
+    line: "<gray><player>: </gray><prefix>"
+
+# Rank-up notification. Placeholders: <player> <rank> (plain name) <prefix> (colored)
+rankup:
+  message: "<green>Congratulations! You ranked up to <prefix>"
+  broadcast: "<gold><player></gold> <gray>ranked up to</gray> <prefix>"
+  title: "<gradient:#f7971e:#ffd200><bold>RANK UP!</bold></gradient>"
+  subtitle: "<gray>You are now <prefix>"
+
+# /progress. Placeholders: <rank> <now> <need>
+progress:
+  none: "<gray>There is no further rank you can reach automatically."
+  header: "<yellow>Progress to <white><rank></white>:"
+  playtime: "<gray> Playtime: <white><now></white> / <need> hours"
+  exp: "<gray> XP earned: <white><now></white> / <need>"

@@ -6,13 +6,16 @@ public class RankPlugin extends JavaPlugin {
 
     private RankManager manager;
     private AutoRankService autoRank;
+    private Messages messages;
 
     public AutoRankService getAutoRank() { return autoRank; }
+    public Messages getMessages() { return messages; }
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         manager = new RankManager(this);
+        messages = new Messages(this);
         manager.load();
 
         getServer().getPluginManager().registerEvents(new RankListener(this, manager), this);
@@ -23,11 +26,11 @@ public class RankPlugin extends JavaPlugin {
 
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new RankExpansion(this, manager).register();
-            getLogger().info("PlaceholderAPI terdeteksi, placeholder %ranksystem_*% aktif.");
+            getLogger().info("PlaceholderAPI detected, %ranksystem_*% placeholders enabled.");
         }
         if (getServer().getPluginManager().isPluginEnabled("Vault")) {
             VaultHook.register(this, manager);
-            getLogger().info("Vault terdeteksi, provider Chat/Permission terdaftar.");
+            getLogger().info("Vault detected, Chat/Permission providers registered.");
         }
         autoRank = new AutoRankService(this, manager);
         getServer().getPluginManager().registerEvents(autoRank, this);
@@ -37,7 +40,7 @@ public class RankPlugin extends JavaPlugin {
             if (sender instanceof org.bukkit.entity.Player p) {
                 autoRank.sendProgress(p);
             } else {
-                sender.sendMessage("Command ini hanya untuk pemain.");
+                messages.send(sender, "command.player-only");
             }
             return true;
         });

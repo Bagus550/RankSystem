@@ -1,159 +1,158 @@
 # ==============================================================================
 #  RankSystem - config.yml
 # ==============================================================================
-#  Setelah mengubah file ini, jalankan:  /rank reload
+#  After editing this file, run:  /rank reload
 #
-#  Semua teks (prefix, format chat, pesan) memakai format MiniMessage:
-#    Warna       : <red>teks</red>, <#ff8800>teks</#ff8800>
-#    Gaya        : <bold>, <italic>, <underlined>, <strikethrough>
-#    Gradient    : <gradient:red:blue>teks</gradient>
+#  Prefixes and the chat format use MiniMessage:
+#    Colors      : <red>text</red>, <#ff8800>text</#ff8800>
+#    Styles      : <bold>, <italic>, <underlined>, <strikethrough>
+#    Gradient    : <gradient:red:blue>text</gradient>
 #    Reset       : <reset>
-#  Dokumentasi lengkap: https://docs.advntr.dev/minimessage/format.html
+#  Full documentation: https://docs.advntr.dev/minimessage/format.html
 #
-#  PENTING: tutup tag yang kamu buka, dan jangan memakai kode warna lama (&a, §a).
+#  IMPORTANT: close every tag you open, and do not use legacy color codes
+#  (&a, §a). Plugin messages live in the lang/ folder, not in this file.
 # ==============================================================================
 
+# Language of the plugin messages. Must match a file name in the lang/ folder
+# (without .yml). Bundled: en (English), id (Indonesian). For another language,
+# copy lang/en.yml to lang/<code>.yml, translate it, then put the code here.
+language: en
 
 # ------------------------------------------------------------------------------
-#  RANK DEFAULT
+#  DEFAULT RANK
 # ------------------------------------------------------------------------------
-#  Rank yang dipakai pemain yang belum pernah diberi rank lewat /rank set.
-#  Nilainya harus sama dengan salah satu ID rank di bagian "ranks" di bawah.
-#  Kalau ID-nya tidak ditemukan, plugin memakai rank pertama yang tertulis.
-default-rank: member
+#  The rank used by players who have never been given a rank with /rank set.
+#  The value must match one of the rank IDs in the "ranks" section below.
+#  If the ID is not found, the plugin uses the first rank listed.
+default-rank: citizen
 
 
 # ------------------------------------------------------------------------------
-#  FORMAT CHAT
+#  CHAT FORMAT
 # ------------------------------------------------------------------------------
 chat:
-  # true  = plugin mengatur tampilan chat (prefix rank muncul di chat)
-  # false = chat dibiarkan memakai format bawaan server / plugin lain
+  # true  = this plugin formats chat (the rank prefix appears in chat)
+  # false = chat keeps the format of the server / another plugin
+  #         (for example EssentialsX Chat)
   enabled: false
 
-  # Placeholder yang tersedia:
-  #   <prefix>  = prefix rank pemain (diambil dari "ranks.<id>.prefix")
-  #   <player>  = nama pemain
-  #   <message> = isi pesan yang diketik pemain
+  # Available placeholders:
+  #   <prefix>  = the player's rank prefix (from "ranks.<id>.prefix")
+  #   <player>  = the player's name
+  #   <message> = the message the player typed
   #
-  # Contoh hasil: [VIP] Bagus » halo semua
+  # Example result: [VIP] Steve » hello everyone
   format: "<prefix> <gray><player></gray><dark_gray> » </dark_gray><white><message></white>"
 
 # ------------------------------------------------------------------------------
-#  NAIK RANK OTOMATIS
+#  PREFIX ANIMATION
 # ------------------------------------------------------------------------------
-#  Syarat ditulis di tiap rank pada bagian "requirements" (lihat bagian ranks).
+#  Applies to prefixes that use {phase}, for example:
+#    <gradient:#f7971e:#ffd200:{phase}>[Owner]</gradient>
+animation:
+  # Duration of one animation cycle in milliseconds. Lower = faster.
+  period-ms: 4000
+
+# ------------------------------------------------------------------------------
+#  AUTOMATIC RANK-UP
+# ------------------------------------------------------------------------------
+#  Requirements are defined per rank in its "requirements" section
+#  (see the ranks section below).
 auto-rankup:
   enabled: true
+  # How often the plugin checks online players (seconds, minimum 10)
   check-interval-seconds: 60
 
-  # Placeholder untuk semua teks di bawah:
-  #   <player>  nama pemain
-  #   <rank>    nama rank (tanpa warna)
-  #   <prefix>  prefix rank lengkap dengan warna/gradient
-  message: "<green>Selamat! Rank kamu naik menjadi <prefix>"
-
-  # Pengumuman ke seluruh server. Agar chat tidak penuh, hanya rank dengan
-  # weight sama atau lebih dari angka ini yang diumumkan.
+  # Server-wide announcement. Only ranks with weight >= this value are announced.
   broadcast-enabled: true
   broadcast-min-weight: 15
-  broadcast: "<gold><player></gold> <gray>naik rank menjadi</gray> <prefix>"
 
-  # Tulisan besar di tengah layar pemain yang naik rank
+  # Large text in the middle of the screen
+  # (the text itself is in the language file: rankup.title / rankup.subtitle)
   title:
     enabled: true
-    title: "<gradient:#f7971e:#ffd200><bold>RANK UP!</bold></gradient>"
-    subtitle: "<gray>Kamu sekarang <prefix>"
     fade-in-ms: 500
     stay-ms: 3500
     fade-out-ms: 1000
 
-  # Suara untuk pemain yang naik rank. Daftar ID suara: minecraft.wiki (cari "Sounds.json")
+  # Sound played for the player who ranks up
   sound:
     enabled: true
     key: "minecraft:ui.toast.challenge_complete"
     volume: 1.0
     pitch: 1.0
 
-  # Efek partikel di sekitar pemain (terlihat juga oleh pemain lain di dekatnya)
+  # Particle effect around the player (nearby players can see it too)
   particles:
     enabled: true
 
 # ------------------------------------------------------------------------------
-#  TAB LIST (daftar pemain yang muncul saat menekan TAB)
+#  TAB LIST (the player list shown when pressing TAB)
 # ------------------------------------------------------------------------------
 tablist:
-  # true  = nama di tab list menjadi "<prefix> <nama>"
-  # false = nama di tab list tidak diubah
+  # true  = the tab list name becomes "<prefix> <name>"
+  # false = the tab list name is left untouched
+  #         (set this to false if a plugin such as TAB manages the tab list)
   enabled: true
 
-
 # ------------------------------------------------------------------------------
-#  PESAN PLUGIN
+#  RANK LIST
 # ------------------------------------------------------------------------------
-#  Pesan yang dikirim ke pengirim command. Placeholder yang tersedia:
-#    <player> = nama pemain yang dituju command
-#    <rank>   = nama tampilan (display-name) rank
-#  Placeholder yang tidak relevan untuk suatu pesan akan kosong.
-messages:
-  no-permission: "<red>Kamu tidak punya izin untuk memakai command ini."
-  rank-set: "<green>Rank <yellow><player></yellow> diubah menjadi <yellow><rank></yellow>."
-  rank-removed: "<green>Rank <yellow><player></yellow> direset ke rank default."
-  unknown-rank: "<red>Rank tidak ditemukan. Cek daftar rank dengan /rank list."
-  unknown-player: "<red>Pemain tidak ditemukan. Pastikan namanya benar dan dia pernah join."
-  reloaded: "<green>Config berhasil di-reload."
-
-
-# ------------------------------------------------------------------------------
-#  DAFTAR RANK
-# ------------------------------------------------------------------------------
-#  Setiap rank ditulis dengan format:
+#  Each rank is written in this format:
 #
-#    <id>:                      # ID rank. Dipakai di command dan di "inherits".
-#                               # Huruf kecil, tanpa spasi (contoh: vip, mod-senior)
-#      display-name: "Nama"     # Nama yang tampil di pesan plugin.
-#      prefix: "<green>[VIP]"   # Teks di depan nama (chat & tab list), format MiniMessage.
-#      weight: 10               # Tingkat rank. Angka lebih besar = rank lebih tinggi.
-#                               # Saat ini dipakai untuk mengurutkan /rank list.
-#      inherits: [member]       # Rank yang permission-nya diwarisi (boleh kosong: []).
-#                               # Pewarisan bisa berantai (admin -> vip -> member).
-#      permissions:             # Daftar permission yang diberikan rank ini.
-#        - nama.permission      # Beri permission.
-#        - "-nama.permission"   # Awali dengan "-" untuk MENCABUT permission
-#                               # (termasuk yang diwarisi dari rank lain).
-#                               # Tanda kutip wajib untuk entri yang diawali "-".
+#    <id>:                      # Rank ID. Used in commands and in "inherits".
+#                               # Lowercase, no spaces (example: vip, mod-senior)
+#      display-name: "Name"     # Name shown in plugin messages.
+#      prefix: "<green>[VIP]"   # Text in front of the player's name (chat and
+#                               # tab list), MiniMessage format.
+#      weight: 10               # Rank level. Higher number = higher rank.
+#                               # Used for the /rank list order, automatic rank-up
+#                               # (only upwards, to a higher weight) and
+#                               # announcements.
+#      requirements:            # (optional) requirements to rank up to this rank
+#                               # automatically.
+#        playtime-hours: 10     # total hours played (decimals allowed, e.g. 0.5)
+#        exp: 2000              # total XP earned (not the level)
+#                               # A rank without "requirements" is never reached
+#                               # automatically.
+#      inherits: [member]       # Ranks whose permissions are inherited (may be
+#                               # empty: []). Inheritance can be chained
+#                               # (admin -> vip -> member).
+#      permissions:             # Permissions granted by this rank.
+#        - some.permission      # Grant a permission.
+#        - "-some.permission"   # Prefix with "-" to REVOKE a permission
+#                               # (including one inherited from another rank).
+#                               # Quotes are required for entries starting with "-".
 #
-#  Aturan penting:
-#   - Jangan membuat rank yang saling mewarisi (A inherits B, B inherits A).
-#     Plugin tidak akan error, tapi pewarisan yang melingkar diabaikan.
-#   - Permission milik rank sendiri selalu menimpa permission yang diwarisi.
-#   - Menghapus rank dari config membuat pemain yang memakainya jatuh
-#     ke rank default.
-#   - Permission "ranks.admin" dibutuhkan untuk memakai command /rank.
-animation:
-  # Lama satu putaran animasi (milidetik). Makin kecil makin cepat.
-  period-ms: 4000
+#  Important rules:
+#   - Do not make ranks inherit each other in a loop (A inherits B, B inherits A).
+#     The plugin will not crash, but circular inheritance is ignored.
+#   - A rank's own permissions always override inherited ones.
+#   - If you remove a rank from this file, players holding it fall back to the
+#     default rank.
+#   - The "ranks.admin" permission is required to use the /rank command.
 ranks:
   citizen:
     display-name: "Citizen"
-    prefix: "<gray>[Citizen]</gray>" # polos, rank paling dasar
+    prefix: "<gray>[Citizen]</gray>" # plain, the most basic rank
     weight: 1
     inherits: []
     permissions:
-      # Home & teleport dasar
+      # Homes and basic teleporting
       - essentials.sethome
       - essentials.home
       - essentials.delhome
       - essentials.back
       - essentials.spawn
-      # Komunikasi & info
+      # Communication and info
       - essentials.msg
       - essentials.ignore
       - essentials.help
       - essentials.list
       - essentials.rules
       - essentials.motd
-      # Ekonomi
+      # Economy
       - essentials.balance
       - essentials.pay
       - essentials.balancetop
@@ -163,7 +162,8 @@ ranks:
     display-name: "Wanderer"
     prefix: "<green>[Wanderer]</green>"
     weight: 5
-    inherits: [citizen]          # otomatis dapat semua permission member
+    inherits: [citizen]          # inherits the permissions of the rank below
+    # Test values. Suggested for production: playtime-hours: 2, exp: 300
     requirements:
       playtime-hours: 0.01
       exp: 10
@@ -174,13 +174,13 @@ ranks:
     display-name: "Explorer"
     prefix: "<aqua><bold>[Explorer]</bold></aqua>"
     weight: 10
-    inherits: [wanderer]          # otomatis dapat semua permission member
+    inherits: [wanderer]         # inherits the permissions of the rank below
     requirements:
       playtime-hours: 10
       exp: 2000
     permissions:
       - essentials.sethome.multiple.explorer
-      - essentials.tpa               # teleport ke teman baru dibuka di sini
+      - essentials.tpa               # teleporting to friends is unlocked here
       - essentials.tpahere
       - essentials.tpaccept
       - essentials.tpdeny
@@ -190,27 +190,28 @@ ranks:
     display-name: "Veteran"
     prefix: "<gold><bold>[Veteran]</bold></gold>"
     weight: 15
-    inherits: [explorer]          # otomatis dapat semua permission member
+    inherits: [explorer]         # inherits the permissions of the rank below
     requirements:
       playtime-hours: 30
       exp: 8000
     permissions:
       - essentials.sethome.multiple.veteran
-      - essentials.back.ondeath
+      - essentials.back.ondeath      # /back to the death location
 
   elite:
     display-name: "Elite"
     prefix: "<gradient:#8e2de2:#ff6ec7><bold>[Elite]</bold></gradient>"
     weight: 20
-    inherits: [veteran]          # otomatis dapat semua permission member
+    inherits: [veteran]          # inherits the permissions of the rank below
     requirements:
       playtime-hours: 80
       exp: 25000
     permissions:
       - essentials.sethome.multiple.elite
-      - essentials.nick              # ganti nickname
-      - essentials.chat.color        # boleh pakai warna di chat
+      - essentials.nick              # change nickname
+      - essentials.chat.color        # may use colors in chat
 
+  # --- Staff ranks: no requirements, assigned manually with /rank set ---------
   moderator:
     display-name: "Moderator"
     prefix: "<gradient:#ff512f:#dd2476><bold>[MOD]</bold></gradient>"
@@ -232,9 +233,9 @@ ranks:
 
   owner:
     display-name: "Owner"
-    prefix: "<gradient:#f7971e:#ffd200:{phase}><bold>[Owner]</bold></gradient>" # gradient warna animasi
+    prefix: "<gradient:#f7971e:#ffd200:{phase}><bold>[Owner]</bold></gradient>" # animated gradient
     weight: 100
     inherits: [moderator]
     permissions:
-      - ranks.admin
+      - ranks.admin                  # required to use /rank
       - essentials.*

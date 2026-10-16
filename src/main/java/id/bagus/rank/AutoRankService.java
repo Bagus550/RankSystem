@@ -119,15 +119,14 @@ public class AutoRankService implements Listener {
         manager.apply(p);
 
         var cfg = plugin.getConfig();
+        var lang = plugin.getMessages();
         TagResolver[] tags = tags(p, rank);
 
-        p.sendMessage(mm.deserialize(cfg.getString("auto-rankup.message",
-                "<green>Selamat! Rank kamu naik menjadi <rank>."), tags));
+        p.sendMessage(lang.get("rankup.message", tags));
 
         if (cfg.getBoolean("auto-rankup.broadcast-enabled", true)
                 && rank.weight() >= cfg.getInt("auto-rankup.broadcast-min-weight", 0)) {
-            plugin.getServer().broadcast(mm.deserialize(cfg.getString("auto-rankup.broadcast",
-                    "<player> naik rank menjadi <rank>!"), tags));
+            plugin.getServer().broadcast(lang.get("rankup.broadcast", tags));
         }
 
         celebrate(p, rank);
@@ -144,8 +143,8 @@ public class AutoRankService implements Listener {
                     Duration.ofMillis(cfg.getLong("auto-rankup.title.stay-ms", 3500)),
                     Duration.ofMillis(cfg.getLong("auto-rankup.title.fade-out-ms", 1000)));
             p.showTitle(Title.title(
-                    mm.deserialize(cfg.getString("auto-rankup.title.title", "<gold><bold>RANK UP!"), tags),
-                    mm.deserialize(cfg.getString("auto-rankup.title.subtitle", "<gray><rank>"), tags),
+                    plugin.getMessages().get("rankup.title", tags),
+                    plugin.getMessages().get("rankup.subtitle", tags),
                     times));
         }
 
@@ -157,7 +156,7 @@ public class AutoRankService implements Listener {
                         (float) cfg.getDouble("auto-rankup.sound.volume", 1.0),
                         (float) cfg.getDouble("auto-rankup.sound.pitch", 1.0)));
             } catch (RuntimeException ex) {
-                plugin.getLogger().warning("auto-rankup.sound.key tidak valid: " + ex.getMessage());
+                plugin.getLogger().warning("Invalid auto-rankup.sound.key: " + ex.getMessage());
             }
         }
 
@@ -170,6 +169,7 @@ public class AutoRankService implements Listener {
     // ------------------------------------------------------------ /progress
 
     public void sendProgress(Player p) {
+        var lang = plugin.getMessages();
         Rank current = manager.getRank(p.getUniqueId());
         int currentWeight = current == null ? 0 : current.weight();
 
@@ -179,18 +179,17 @@ public class AutoRankService implements Listener {
                 .orElse(null);
 
         if (next == null) {
-            p.sendMessage(mm.deserialize("<gray>Tidak ada rank berikutnya yang bisa dicapai otomatis."));
+            p.sendMessage(lang.get("progress.none"));
             return;
         }
 
         String hoursNow = String.format(Locale.ROOT, "%.1f", playtimeHours(p));
         String hoursNeed = String.format(Locale.ROOT, "%.1f", next.playtimeHours());
 
-        p.sendMessage(mm.deserialize("<yellow>Progres menuju <white><rank></white>:",
-                Placeholder.unparsed("rank", next.displayName())));
-        p.sendMessage(mm.deserialize("<gray> Waktu bermain: <white><now></white> / <need> jam",
+        p.sendMessage(lang.get("progress.header", Placeholder.unparsed("rank", next.displayName())));
+        p.sendMessage(lang.get("progress.playtime",
                 Placeholder.unparsed("now", hoursNow), Placeholder.unparsed("need", hoursNeed)));
-        p.sendMessage(mm.deserialize("<gray> Exp diperoleh: <white><now></white> / <need>",
+        p.sendMessage(lang.get("progress.exp",
                 Placeholder.unparsed("now", String.valueOf(expOf(p))),
                 Placeholder.unparsed("need", String.valueOf(next.exp()))));
     }
@@ -215,7 +214,7 @@ public class AutoRankService implements Listener {
             y.save(file);
             dirty = false;
         } catch (IOException e) {
-            plugin.getLogger().severe("Gagal menyimpan progress.yml: " + e.getMessage());
+            plugin.getLogger().severe("Failed to save progress.yml: " + e.getMessage());
         }
     }
 }

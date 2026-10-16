@@ -1,0 +1,42 @@
+# ==============================================================================
+#  RankSystem - file bahasa (id)
+# ==============================================================================
+#  Muat ulang dengan /rank reload. Pilih bahasa lewat "language:" di config.yml.
+#  Teks memakai MiniMessage. Placeholder berbentuk <player>, <rank>, <prefix>.
+#  Kunci yang tidak ada di file ini otomatis memakai teks bahasa Inggris.
+#
+#  Untuk menampilkan tanda "<" apa adanya (misalnya di baris usage), tulis \<
+#  dan apit seluruh nilainya dengan tanda kutip tunggal, seperti entri "usage".
+# ==============================================================================
+
+command:
+  no-permission: "<red>Kamu tidak punya izin untuk melakukan itu."
+  player-only: "<red>Command ini hanya untuk pemain."
+  reloaded: "<green>Config dan bahasa berhasil di-reload."
+  unknown-player: "<red>Pemain tidak ditemukan. Cek namanya dan pastikan dia pernah join."
+  unknown-rank: "<red>Rank tidak ditemukan. Lihat daftarnya dengan /rank list."
+  rank-set: "<green>Rank <yellow><player></yellow> diubah menjadi <yellow><rank></yellow>."
+  rank-removed: "<green>Rank <yellow><player></yellow> direset ke rank default."
+  usage:
+    main: '<gray>Penggunaan: <white>/rank set|remove|info|list|reload|preview'
+    set: '<gray>Penggunaan: <white>/rank set \<pemain> \<rank>'
+    remove: '<gray>Penggunaan: <white>/rank remove \<pemain>'
+    info: '<gray>Penggunaan: <white>/rank info \<pemain>'
+    preview: '<gray>Penggunaan: <white>/rank preview \<rank>'
+  list:
+    header: "<gray>Rank tersedia:"
+    entry: "<prefix> <gray>(<id>, weight <weight>)"
+  info:
+    line: "<gray><player>: </gray><prefix>"
+
+rankup:
+  message: "<green>Selamat! Rank kamu naik menjadi <prefix>"
+  broadcast: "<gold><player></gold> <gray>naik rank menjadi</gray> <prefix>"
+  title: "<gradient:#f7971e:#ffd200><bold>RANK UP!</bold></gradient>"
+  subtitle: "<gray>Kamu sekarang <prefix>"
+
+progress:
+  none: "<gray>Tidak ada rank berikutnya yang bisa dicapai otomatis."
+  header: "<yellow>Progres menuju <white><rank></white>:"
+  playtime: "<gray> Waktu bermain: <white><now></white> / <need> jam"
+  exp: "<gray> Exp diperoleh: <white><now></white> / <need>"

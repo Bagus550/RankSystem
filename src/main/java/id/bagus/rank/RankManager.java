@@ -95,7 +95,7 @@ public class RankManager {
         try {
             data.save(dataFile);
         } catch (IOException e) {
-            plugin.getLogger().severe("Gagal menyimpan data.yml: " + e.getMessage());
+            plugin.getLogger().severe("Failed to save data.yml: " + e.getMessage());
         }
     }
 
