@@ -3,6 +3,10 @@
 # ==============================================================================
 #  After editing this file, run:  /rank reload
 #
+#  This default config is intentionally plain. The ranks, prefixes, and
+#  permissions below are only a starting point: change them to fit your server.
+#  See "STYLING IDEAS" further down for ways to make prefixes stand out.
+#
 #  Prefixes and the chat format use MiniMessage:
 #    Colors      : <red>text</red>, <#ff8800>text</#ff8800>
 #    Styles      : <bold>, <italic>, <underlined>, <strikethrough>
@@ -25,7 +29,7 @@ language: en
 #  The rank used by players who have never been given a rank with /rank set.
 #  The value must match one of the rank IDs in the "ranks" section below.
 #  If the ID is not found, the plugin uses the first rank listed.
-default-rank: citizen
+default-rank: member
 
 
 # ------------------------------------------------------------------------------
@@ -34,21 +38,21 @@ default-rank: citizen
 chat:
   # true  = this plugin formats chat (the rank prefix appears in chat)
   # false = chat keeps the format of the server / another plugin
-  #         (for example EssentialsX Chat)
-  enabled: false
+  #         (set this to false if EssentialsX Chat or a similar plugin formats chat)
+  enabled: true
 
   # Available placeholders:
   #   <prefix>  = the player's rank prefix (from "ranks.<id>.prefix")
   #   <player>  = the player's name
   #   <message> = the message the player typed
   #
-  # Example result: [VIP] Steve » hello everyone
-  format: "<prefix> <gray><player></gray><dark_gray> » </dark_gray><white><message></white>"
+  # Example result: [Member] Steve: hello everyone
+  format: "<prefix> <player><gray>: </gray><white><message></white>"
 
 # ------------------------------------------------------------------------------
 #  PREFIX ANIMATION
 # ------------------------------------------------------------------------------
-#  Applies to prefixes that use {phase}, for example:
+#  Only used by prefixes that contain {phase}, for example:
 #    <gradient:#f7971e:#ffd200:{phase}>[Owner]</gradient>
 animation:
   # Duration of one animation cycle in milliseconds. Lower = faster.
@@ -58,15 +62,17 @@ animation:
 #  AUTOMATIC RANK-UP
 # ------------------------------------------------------------------------------
 #  Requirements are defined per rank in its "requirements" section
-#  (see the ranks section below).
+#  (see the ranks section below). Ranks without requirements are never
+#  reached automatically.
 auto-rankup:
   enabled: true
   # How often the plugin checks online players (seconds, minimum 10)
   check-interval-seconds: 60
 
   # Server-wide announcement. Only ranks with weight >= this value are announced.
+  # 0 = announce every automatic rank-up.
   broadcast-enabled: true
-  broadcast-min-weight: 15
+  broadcast-min-weight: 0
 
   # Large text in the middle of the screen
   # (the text itself is in the language file: rankup.title / rankup.subtitle)
@@ -95,6 +101,18 @@ tablist:
   # false = the tab list name is left untouched
   #         (set this to false if a plugin such as TAB manages the tab list)
   enabled: true
+
+# ------------------------------------------------------------------------------
+#  STYLING IDEAS (copy any of these into a rank's "prefix")
+# ------------------------------------------------------------------------------
+#    Plain color : "<green>[VIP]</green>"
+#    Hex color   : "<#ff8800>[VIP]</#ff8800>"
+#    Bold        : "<gold><bold>[VIP]</bold></gold>"
+#    Gradient    : "<gradient:#4facfe:#00f2fe><bold>[VIP]</bold></gradient>"
+#    Rainbow     : "<rainbow>[VIP]</rainbow>"
+#    Animated    : "<gradient:#f7971e:#ffd200:{phase}>[VIP]</gradient>"
+#                  (animated prefixes move in places that refresh often, such as
+#                   the TAB plugin. See the "animation" section above.)
 
 # ------------------------------------------------------------------------------
 #  RANK LIST
@@ -131,111 +149,43 @@ tablist:
 #   - A rank's own permissions always override inherited ones.
 #   - If you remove a rank from this file, players holding it fall back to the
 #     default rank.
+#   - Bukkit does not treat "*" as a wildcard. Use plugin-specific wildcards
+#     such as "essentials.*" if the plugin provides them.
 #   - The "ranks.admin" permission is required to use the /rank command.
 ranks:
-  citizen:
-    display-name: "Citizen"
-    prefix: "<gray>[Citizen]</gray>" # plain, the most basic rank
+  member:
+    display-name: "Member"
+    prefix: "<gray>[Member]</gray>"
     weight: 1
     inherits: []
-    permissions:
-      # Homes and basic teleporting
-      - essentials.sethome
-      - essentials.home
-      - essentials.delhome
-      - essentials.back
-      - essentials.spawn
-      # Communication and info
-      - essentials.msg
-      - essentials.ignore
-      - essentials.help
-      - essentials.list
-      - essentials.rules
-      - essentials.motd
-      # Economy
-      - essentials.balance
-      - essentials.pay
-      - essentials.balancetop
-      - essentials.afk
+    permissions: []
+    # Example:
+    # permissions:
+    #   - some.permission
 
-  wanderer:
-    display-name: "Wanderer"
-    prefix: "<green>[Wanderer]</green>"
+  regular:
+    display-name: "Regular"
+    prefix: "<green>[Regular]</green>"
     weight: 5
-    inherits: [citizen]          # inherits the permissions of the rank below
-    # Test values. Suggested for production: playtime-hours: 2, exp: 300
+    inherits: [member]
+    # Reached automatically after 5 hours of playtime and 1000 XP earned.
     requirements:
-      playtime-hours: 0.01
-      exp: 10
-    permissions:
-      - essentials.sethome.multiple.wanderer
-
-  explorer:
-    display-name: "Explorer"
-    prefix: "<aqua><bold>[Explorer]</bold></aqua>"
-    weight: 10
-    inherits: [wanderer]         # inherits the permissions of the rank below
-    requirements:
-      playtime-hours: 10
-      exp: 2000
-    permissions:
-      - essentials.sethome.multiple.explorer
-      - essentials.tpa               # teleporting to friends is unlocked here
-      - essentials.tpahere
-      - essentials.tpaccept
-      - essentials.tpdeny
-      - essentials.tpacancel
-
-  veteran:
-    display-name: "Veteran"
-    prefix: "<gold><bold>[Veteran]</bold></gold>"
-    weight: 15
-    inherits: [explorer]         # inherits the permissions of the rank below
-    requirements:
-      playtime-hours: 30
-      exp: 8000
-    permissions:
-      - essentials.sethome.multiple.veteran
-      - essentials.back.ondeath      # /back to the death location
-
-  elite:
-    display-name: "Elite"
-    prefix: "<gradient:#8e2de2:#ff6ec7><bold>[Elite]</bold></gradient>"
-    weight: 20
-    inherits: [veteran]          # inherits the permissions of the rank below
-    requirements:
-      playtime-hours: 80
-      exp: 25000
-    permissions:
-      - essentials.sethome.multiple.elite
-      - essentials.nick              # change nickname
-      - essentials.chat.color        # may use colors in chat
+      playtime-hours: 5
+      exp: 1000
+    permissions: []
 
   # --- Staff ranks: no requirements, assigned manually with /rank set ---------
   moderator:
     display-name: "Moderator"
-    prefix: "<gradient:#ff512f:#dd2476><bold>[MOD]</bold></gradient>"
+    prefix: "<blue>[Mod]</blue>"
     weight: 50
-    inherits: [elite]
-    permissions:
-      - essentials.fly
-      - essentials.sethome.multiple.staff
-      - essentials.kick
-      - essentials.mute
-      - essentials.tempban
-      - essentials.tp
-      - essentials.tphere
-      - essentials.invsee
-      - essentials.vanish
-      - essentials.socialspy
-      - essentials.seen
-      - essentials.whois
+    inherits: [regular]
+    permissions: []
 
-  owner:
-    display-name: "Owner"
-    prefix: "<gradient:#f7971e:#ffd200:{phase}><bold>[Owner]</bold></gradient>" # animated gradient
+  admin:
+    display-name: "Admin"
+    prefix: "<red>[Admin]</red>"
     weight: 100
     inherits: [moderator]
     permissions:
       - ranks.admin                  # required to use /rank
-      - essentials.*
